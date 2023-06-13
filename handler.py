@@ -15,13 +15,13 @@ class Handler:
         self.atm_obj = atm.Atmosphere()
         self.dataset_airfoils = pd.read_csv(AIRFOILS_FILE, sep=',', header=0)
 
-    def calc_stall_speed(self):
+    def compute_stall_speed(self):
         v_stall = math.sqrt((self.aero_obj.weight / self.aero_obj.surface) *
-                            2 / (self.atm_obj.density() * self.aero_obj.cl_max))
+                            2 / (self.atm_obj.compute_density() * self.aero_obj.cl_max))
 
         # temporary printing
         print(f"stall speed is: {v_stall} (m/s)")
         return v_stall
 
-    def calc_optimal_speed(self):
+    def compute_optimal_speed(self):
         pass

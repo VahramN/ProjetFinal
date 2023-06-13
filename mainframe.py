@@ -1,70 +1,77 @@
 import tkinter as tk
 from tkinter import ttk
-import handler
+from airfoildataframe import AirfoilDataFrame
+from handler import Handler
 
 
-handler = handler.Handler()
+class App(tk.Tk):
+    def __init__(self):
+        super().__init__()
 
-# need to bring under the class
+        self.handler = Handler()
+
+        self.airfoil_dataframe = AirfoilDataFrame(self)
+        self.airfoil_dataframe.pack(expand=True)
+
+        self.geometry('1500x770+2+1')
+        self.title('MGA802 Final project')
+
+        self.lbl_weight = ttk.Label(self, text="Weight (Kg)")
+        self.lbl_surface = ttk.Label(self, text="Surface (m^2)")
+        self.lbl_wingspan = ttk.Label(self, text="Wingspan (m)")
+        self.lbl_altitude = ttk.Label(self, text="Altitude (m)")
+
+        self.lbl_weight.place(relx=0.01, rely=0.85, anchor='sw')
+        self.lbl_surface.place(relx=0.01, rely=0.88, anchor='sw')
+        self.lbl_wingspan.place(relx=0.01, rely=0.91, anchor='sw')
+        self.lbl_altitude.place(relx=0.01, rely=0.94, anchor='sw')
+
+        self.txt_weight = tk.Entry(self)
+        self.txt_surface = tk.Entry(self)
+        self.txt_wingspan = tk.Entry(self)
+        self.txt_altitude = tk.Entry(self)
+
+        self.txt_weight.place(relx=0.08, rely=0.85, anchor='sw')
+        self.txt_surface.place(relx=0.08, rely=0.88, anchor='sw')
+        self.txt_wingspan.place(relx=0.08, rely=0.91, anchor='sw')
+        self.txt_altitude.place(relx=0.08, rely=0.94, anchor='sw')
+
+        self.btn_stall_speed = tk.Button(self, text="Stall speed", command=self.compute_stall_speed)
+        self.btn_optimal_speed = tk.Button(self, text="Optimal speed", command=self.compute_optimal_speed)
+
+        self.btn_stall_speed.place(relx=0.18, rely=0.86, anchor='sw')
+        self.btn_optimal_speed.place(relx=0.18, rely=0.9, anchor='sw')
+
+    def populate_from_frame_to_objects(self):
+        # wing aerodynamics
+        self.handler.aero_obj.weight = float(self.txt_weight.get())
+        self.handler.aero_obj.surface = float(self.txt_surface.get())
+        self.handler.aero_obj.wingspan = float(self.txt_wingspan.get())
+
+        # TEMPORARY VALUES
+        self.handler.aero_obj.cl_max = 1.3
+        self.handler.aero_obj.l_d_max = 122
+
+        # Air
+        self.handler.atm_obj.altitude = float(self.txt_altitude.get())
+
+    def compute_stall_speed(self):
+        self.populate_from_frame_to_objects()
+        self.handler.compute_stall_speed()
+
+    def compute_optimal_speed(self):
+        self.populate_from_frame_to_objects()
+        self.handler.compute_optimal_speed()
+
+    # def open_window(self):
+    #     window = Window(self)
+    #     window.grab_set()
+
+    # def test(self):
+    #     afdf = AirfoilDataFrame(self)
+    #     afdf.grab_set()
 
 
-def populate_from_frame_to_objects():
-    # wing aerodynamics
-    handler.aero_obj.weight = float(txt_weight.get())
-    handler.aero_obj.surface = float(txt_surface.get())
-    handler.aero_obj.wingspan = float(txt_wingspan.get())
-    # temporary values
-    handler.aero_obj.cl_max = 1.3
-    handler.aero_obj.l_d_max = 122
-
-    # Air
-    handler.atm_obj.altitude = float(txt_altitude.get())
-
-
-def calc_stall_speed():
-    populate_from_frame_to_objects()
-    handler.calc_stall_speed()
-
-
-def calc_optimal_speed():
-    populate_from_frame_to_objects()
-    handler.calc_optimal_speed()
-
-
-root = tk.Tk()
-root.geometry("500x500")  # width x height
-root.title("MGA802 Final project")  # Adding a title
-
-lbl_weight = tk.Label(root, text="Weight (Kg)")
-lbl_surface = tk.Label(root, text="Surface (m^2)")
-lbl_wingspan = tk.Label(root, text="Wingspan (m)")
-lbl_altitude = tk.Label(root, text="Altitude (m)")
-
-lbl_weight.grid(row=0, column=0, sticky='W', pady=2)
-lbl_surface.grid(row=1, column=0, sticky='W', pady=2)
-lbl_wingspan.grid(row=2, column=0, sticky='W', pady=2)
-lbl_altitude.grid(row=3, column=0, sticky='W', pady=2)
-
-# entry widgets, used to take entry from user
-txt_weight = tk.Entry(root)
-txt_surface = tk.Entry(root)
-txt_wingspan = tk.Entry(root)
-txt_altitude = tk.Entry(root)
-
-# this will arrange entry widgets
-txt_weight.grid(row=0, column=1, pady=2)
-txt_surface.grid(row=1, column=1, pady=2)
-txt_wingspan.grid(row=2, column=1, pady=2)
-txt_altitude.grid(row=3, column=1, pady=2)
-
-# button widget
-btn_stall_speed = tk.Button(root, text="Stall speed", command=calc_stall_speed)
-btn_optimal_speed = tk.Button(root, text="Optimal speed", command=calc_optimal_speed)
-
-# arranging button widgets
-btn_stall_speed.grid(row=10, column=0, sticky='E')
-btn_optimal_speed.grid(row=10, column=1, sticky='E')
-
-# infinite loop which can be terminated
-# by keyboard or mouse interrupt
-tk.mainloop()
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
