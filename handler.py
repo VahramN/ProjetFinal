@@ -5,15 +5,16 @@ from pandastable import Table
 import matplotlib
 import aerodynamics as aero
 import atmosphere as atm
+from airfoildataframe import AirfoilDataFrame
 
 AIRFOILS_FILE = "airfoils.csv"
 
 
 class Handler:
     def __init__(self):
-        self.aero_obj = aero.Aerodynamics()
-        self.atm_obj = atm.Atmosphere()
-        self.dataset_airfoils = pd.read_csv(AIRFOILS_FILE, sep=',', header=0)
+        self.aero_obj = None
+        self.atm_obj = None
+        self.airfoil_obj = None
 
     def compute_stall_speed(self):
         v_stall = math.sqrt((self.aero_obj.weight / self.aero_obj.surface) *

@@ -2,16 +2,18 @@ import tkinter as tk
 from tkinter import ttk
 from airfoildataframe import AirfoilDataFrame
 from handler import Handler
-
+from aerodynamics import Aerodynamics
+from atmosphere import Atmosphere
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        self.handler = Handler()
-
         self.airfoil_dataframe = AirfoilDataFrame(self)
         self.airfoil_dataframe.pack(expand=True)
+
+        self.handler = Handler()
+        self.handler.airfoil_obj = self.airfoil_dataframe
 
         self.geometry('1500x770+2+1')
         self.title('MGA802 Final project')
@@ -44,16 +46,14 @@ class App(tk.Tk):
 
     def populate_from_frame_to_objects(self):
         # wing aerodynamics
-        self.handler.aero_obj.weight = float(self.txt_weight.get())
-        self.handler.aero_obj.surface = float(self.txt_surface.get())
-        self.handler.aero_obj.wingspan = float(self.txt_wingspan.get())
-
-        # TEMPORARY VALUES
-        self.handler.aero_obj.cl_max = 1.3
-        self.handler.aero_obj.l_d_max = 122
+        self.handler.aero_obj = Aerodynamics(float(self.txt_weight.get()),
+                                             float(self.txt_surface.get()),
+                                             float(self.txt_wingspan.get()),
+                                             cl_max=1.3,  # TEMPORARY VALUE
+                                             l_d_max=122)  # TEMPORARY VALUE
 
         # Air
-        self.handler.atm_obj.altitude = float(self.txt_altitude.get())
+        self.handler.atm_obj = Atmosphere(float(self.txt_altitude.get()))
 
     def compute_stall_speed(self):
         self.populate_from_frame_to_objects()

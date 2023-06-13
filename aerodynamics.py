@@ -1,11 +1,11 @@
 class Aerodynamics:
 
-    def __init__(self):
-        self._weight = 0.
-        self._surface = 0.
-        self._wingspan = 0.
-        self._cl_max = 0.
-        self._l_d_max = 0.
+    def __init__(self, weight, surface, wingspan, cl_max, l_d_max):
+        self._weight = weight
+        self._surface = surface
+        self._wingspan = wingspan
+        self._cl_max = cl_max
+        self._l_d_max = l_d_max
 
     @property
     def weight(self):
