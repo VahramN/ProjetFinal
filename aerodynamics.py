@@ -1,9 +1,11 @@
 class Aerodynamics:
 
-    def __init__(self, weight, surface, wingspan, cl_max, l_d_max):
+    def __init__(self, weight, surface, wingspan, sweep_angle, thrust, cl_max, l_d_max):
         self._weight = weight
         self._surface = surface
         self._wingspan = wingspan
+        self._sweep_angle = sweep_angle
+        self._thrust = thrust
         self._cl_max = cl_max
         self._l_d_max = l_d_max
 
@@ -24,6 +26,30 @@ class Aerodynamics:
         self._surface = value
 
     @property
+    def wingspan(self):
+        return self._wingspan
+
+    @surface.setter
+    def wingspan(self, value):
+        self._wingspan = value
+
+    @property
+    def sweep_angle(self):
+        return self._sweep_angle
+
+    @surface.setter
+    def sweep_angle(self, value):
+        self._sweep_angle = value
+
+    @property
+    def thrust(self):
+        return self._thrust
+
+    @surface.setter
+    def thrust(self, value):
+        self._thrust = value
+
+    @property
     def cl_max(self):
         return self._cl_max
 
@@ -39,5 +65,3 @@ class Aerodynamics:
     def l_d_max(self, value):
         self._l_d_max = value
 
-    def calc_stall_speed(self):
-        pass

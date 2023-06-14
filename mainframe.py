@@ -22,28 +22,36 @@ class App(tk.Tk):
         self.lbl_weight = ttk.Label(self, text="Weight (Kg)")
         self.lbl_surface = ttk.Label(self, text="Surface (m^2)")
         self.lbl_wingspan = ttk.Label(self, text="Wingspan (m)")
+        self.lbl_sweep_angle = ttk.Label(self, text="Sweep angle (deg)")
+        self.lbl_thrust = ttk.Label(self, text="Thrust (todo)")
         self.lbl_altitude = ttk.Label(self, text="Altitude (m)")
 
-        self.lbl_weight.place(relx=0.01, rely=0.85, anchor='sw')
-        self.lbl_surface.place(relx=0.01, rely=0.88, anchor='sw')
-        self.lbl_wingspan.place(relx=0.01, rely=0.91, anchor='sw')
-        self.lbl_altitude.place(relx=0.01, rely=0.94, anchor='sw')
+        self.lbl_weight.place(relx=0.01, rely=0.83, anchor='sw')
+        self.lbl_surface.place(relx=0.01, rely=0.86, anchor='sw')
+        self.lbl_wingspan.place(relx=0.01, rely=0.89, anchor='sw')
+        self.lbl_sweep_angle.place(relx=0.01, rely=0.92, anchor='sw')
+        self.lbl_thrust.place(relx=0.01, rely=0.95, anchor='sw')
+        self.lbl_altitude.place(relx=0.01, rely=0.98, anchor='sw')
 
         self.txt_weight = tk.Entry(self)
         self.txt_surface = tk.Entry(self)
         self.txt_wingspan = tk.Entry(self)
+        self.txt_sweep_angle = tk.Entry(self, textvariable=tk.StringVar(self, value='0'))
+        self.txt_thrust = tk.Entry(self)
         self.txt_altitude = tk.Entry(self)
 
-        self.txt_weight.place(relx=0.08, rely=0.85, anchor='sw')
-        self.txt_surface.place(relx=0.08, rely=0.88, anchor='sw')
-        self.txt_wingspan.place(relx=0.08, rely=0.91, anchor='sw')
-        self.txt_altitude.place(relx=0.08, rely=0.94, anchor='sw')
+        self.txt_weight.place(relx=0.1, rely=0.83, anchor='sw')
+        self.txt_surface.place(relx=0.1, rely=0.86, anchor='sw')
+        self.txt_wingspan.place(relx=0.1, rely=0.89, anchor='sw')
+        self.txt_sweep_angle.place(relx=0.1, rely=0.92, anchor='sw')
+        self.txt_thrust.place(relx=0.1, rely=0.95, anchor='sw')
+        self.txt_altitude.place(relx=0.1, rely=0.98, anchor='sw')
 
         self.btn_stall_speed = tk.Button(self, text="Stall speed", command=self.compute_stall_speed)
         self.btn_optimal_speed = tk.Button(self, text="Optimal speed", command=self.compute_optimal_speed)
 
-        self.btn_stall_speed.place(relx=0.22, rely=0.86, anchor='sw')
-        self.btn_optimal_speed.place(relx=0.22, rely=0.9, anchor='sw')
+        self.btn_stall_speed.place(relx=0.25, rely=0.835, anchor='sw')
+        self.btn_optimal_speed.place(relx=0.25, rely=0.875, anchor='sw')
 
     def populate_from_frame_to_objects(self):
         selected_row = self.airfoil_dataframe.table.getSelectedRow()
@@ -53,6 +61,8 @@ class App(tk.Tk):
         self.handler.aero_obj = Aerodynamics(float(self.txt_weight.get()),
                                              float(self.txt_surface.get()),
                                              float(self.txt_wingspan.get()),
+                                             float(self.txt_sweep_angle.get()),
+                                             float(self.txt_thrust.get()),
                                              cl_max=float(cl_max),
                                              l_d_max=float(l_d_max))
 
