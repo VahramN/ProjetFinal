@@ -5,6 +5,7 @@ from handler import Handler
 from aerodynamics import Aerodynamics
 from atmosphere import Atmosphere
 
+
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -41,16 +42,19 @@ class App(tk.Tk):
         self.btn_stall_speed = tk.Button(self, text="Stall speed", command=self.compute_stall_speed)
         self.btn_optimal_speed = tk.Button(self, text="Optimal speed", command=self.compute_optimal_speed)
 
-        self.btn_stall_speed.place(relx=0.18, rely=0.86, anchor='sw')
-        self.btn_optimal_speed.place(relx=0.18, rely=0.9, anchor='sw')
+        self.btn_stall_speed.place(relx=0.22, rely=0.86, anchor='sw')
+        self.btn_optimal_speed.place(relx=0.22, rely=0.9, anchor='sw')
 
     def populate_from_frame_to_objects(self):
+        selected_row = self.airfoil_dataframe.table.getSelectedRow()
+        cl_max = self.airfoil_dataframe.dataset_airfoils.at[selected_row, 'Cl max']
+        l_d_max = self.airfoil_dataframe.dataset_airfoils.at[selected_row, 'Cl/Cd max']
         # wing aerodynamics
         self.handler.aero_obj = Aerodynamics(float(self.txt_weight.get()),
                                              float(self.txt_surface.get()),
                                              float(self.txt_wingspan.get()),
-                                             cl_max=1.3,  # TEMPORARY VALUE
-                                             l_d_max=122)  # TEMPORARY VALUE
+                                             cl_max=float(cl_max),
+                                             l_d_max=float(l_d_max))
 
         # Air
         self.handler.atm_obj = Atmosphere(float(self.txt_altitude.get()))
