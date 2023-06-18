@@ -1,5 +1,6 @@
-import math
+import numpy as np
 from atmosphere import Atmosphere
+
 
 class Handler:
     def __init__(self):
@@ -12,8 +13,8 @@ class Handler:
         return speed / 1.687811
 
     def compute_stall_speed(self):
-        v_stall = math.sqrt((self.aero_obj.weight / self.aero_obj.surface) *
-                            2 / (self.atm_obj.compute_density_imperial() * self.aero_obj.cl_max))
+        v_stall = np.sqrt((self.aero_obj.weight / self.aero_obj.surface) *
+                          2 / (self.atm_obj.compute_density_imperial() * self.aero_obj.cl_max))
         v_stall = self.convert_speed_imperial_to_knots(v_stall)
         # temporary printing
         print(f"stall speed is: {v_stall} (kts)")
@@ -26,7 +27,8 @@ class Handler:
         return v_takeoff
 
     def compute_optimal_speed(self):
-        v_optimal = math.sqrt((2 * self.aero_obj.weight) / (self.atm_obj.compute_density_imperial() * self.aero_obj.surface)) * \
+        v_optimal = np.sqrt(
+            (2 * self.aero_obj.weight) / (self.atm_obj.compute_density_imperial() * self.aero_obj.surface)) * \
                     (3 * self.coeff_K() / self.coeff_drag0()) ** 0.25
         v_optimal = self.convert_speed_imperial_to_knots(v_optimal)
         # temporary printing
@@ -39,7 +41,7 @@ class Handler:
               (1 / self.aero_obj.cl_max) * \
               (self.aero_obj.weight / self.aero_obj.thrust) * (1 / density_ratio)
 
-        takeoff_distance = 20.9 * TOP + 87 * math.sqrt(TOP * (self.aero_obj.thrust / self.aero_obj.weight))
+        takeoff_distance = 20.9 * TOP + 87 * np.sqrt(TOP * (self.aero_obj.thrust / self.aero_obj.weight))
         # temporary printing
         print(f"takeoff distance is: {takeoff_distance} (ft)")
         return takeoff_distance

@@ -1,5 +1,5 @@
 # Class copied from the MGA802 course notes
-import math
+import numpy as np
 
 class Atmosphere:
     def __init__(self, altitude=0.):
@@ -43,7 +43,7 @@ class Atmosphere:
         gamma = 1.4  # coefficient de dilatation adiabatique de l'air
         R = 287  # J/kg/K
         T = self.temperature()
-        return math.sqrt(gamma * R * T)
+        return np.sqrt(gamma * R * T)
 
     @property
     def altitude(self):

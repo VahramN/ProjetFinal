@@ -1,3 +1,4 @@
+import numpy as np
 import tkinter as tk
 from tkinter import ttk
 from airfoildataframe import AirfoilDataFrame
@@ -25,59 +26,93 @@ class App(tk.Tk):
         self.lbl_weight = ttk.Label(self, text="Weight (lb)")
         self.lbl_surface = ttk.Label(self, text="Surface (ft^2)")
         self.lbl_wingspan = ttk.Label(self, text="Wingspan (ft)")
-        self.lbl_sweep_angle = ttk.Label(self, text="Sweep angle (deg)")
         self.lbl_thrust = ttk.Label(self, text="Jet Thrust (todo)")
         self.lbl_altitude = ttk.Label(self, text="Altitude (ft)")
 
         self.lbl_weight.place(relx=0.01, rely=0.83, anchor='sw')
         self.lbl_surface.place(relx=0.01, rely=0.86, anchor='sw')
         self.lbl_wingspan.place(relx=0.01, rely=0.89, anchor='sw')
-        self.lbl_sweep_angle.place(relx=0.01, rely=0.92, anchor='sw')
-        self.lbl_thrust.place(relx=0.01, rely=0.95, anchor='sw')
-        self.lbl_altitude.place(relx=0.01, rely=0.98, anchor='sw')
+        self.lbl_thrust.place(relx=0.01, rely=0.92, anchor='sw')
+        self.lbl_altitude.place(relx=0.01, rely=0.95, anchor='sw')
 
         self.txt_weight = tk.Entry(self)
         self.txt_surface = tk.Entry(self)
         self.txt_wingspan = tk.Entry(self)
-        self.txt_sweep_angle = tk.Entry(self, textvariable=tk.StringVar(self, value='0'))
         self.txt_thrust = tk.Entry(self)
         self.txt_altitude = tk.Entry(self)
 
         self.txt_weight.place(relx=0.1, rely=0.83, anchor='sw')
         self.txt_surface.place(relx=0.1, rely=0.86, anchor='sw')
         self.txt_wingspan.place(relx=0.1, rely=0.89, anchor='sw')
-        self.txt_sweep_angle.place(relx=0.1, rely=0.92, anchor='sw')
-        self.txt_thrust.place(relx=0.1, rely=0.95, anchor='sw')
-        self.txt_altitude.place(relx=0.1, rely=0.98, anchor='sw')
+        self.txt_thrust.place(relx=0.1, rely=0.92, anchor='sw')
+        self.txt_altitude.place(relx=0.1, rely=0.95, anchor='sw')
 
         self.btn_stall_speed = tk.Button(self, text="Stall speed", command=self.compute_stall_speed)
         self.btn_takeoff_speed = tk.Button(self, text="Takeoff speed", command=self.compute_takeoff_speed)
         self.btn_optimal_speed = tk.Button(self, text="Optimal speed max distance", command=self.compute_optimal_speed)
-        self.btn_takeoff_distance = tk.Button(self, text="Takeoff distance", command=self.compute_takeoff_distance)
-        self.btn_landing_distance = tk.Button(self, text="Landing distance", command=self.compute_landing_distance)
 
         self.btn_stall_speed.place(relx=0.25, rely=0.835, anchor='sw')
         self.btn_takeoff_speed.place(relx=0.25, rely=0.875, anchor='sw')
         self.btn_optimal_speed.place(relx=0.25, rely=0.915, anchor='sw')
-        self.btn_takeoff_distance.place(relx=0.25, rely=0.955, anchor='sw')
-        self.btn_landing_distance.place(relx=0.25, rely=0.995, anchor='sw')
+
+        self.btn_takeoff_distance = tk.Button(self, text="Takeoff distance", command=self.compute_takeoff_distance)
+        self.btn_landing_distance = tk.Button(self, text="Landing distance", command=self.compute_landing_distance)
+
+        self.btn_takeoff_distance.place(relx=0.4, rely=0.835, anchor='sw')
+        self.btn_landing_distance.place(relx=0.4, rely=0.875, anchor='sw')
+
+    # text format can be the single float value or the range, ex: 1000-1200
+    # allow_range bool value and in case of false, even the text is given in range format
+    # the function will consider only the first value and will return the single float value
+    def treat_text_range_to_points(self, text, allow_range):
+        arr = text.split("-")
+        if (len(arr) > 1) and allow_range:
+            start_limit = float(arr[0])
+            end_limit = float(arr[len(arr) - 1])
+            num = int(abs(end_limit - start_limit) * 10)
+            # lets limit to [200-2000] points max
+            np.clip(num, 200, 2000)
+            arr_range = np.linspace(start_limit, end_limit, num)
+        elif len(arr) > 1:
+            # we will take only the first value and will ignore the rest
+            arr_range = float(arr[0])
+        else:
+            arr_range = float(text)
+        print(arr_range)
+        return arr_range
 
     def populate_from_frame_to_objects(self):
         selected_row = self.airfoil_dataframe.table.getSelectedRow()
+        # wing aerodynamics
         cl_max = self.airfoil_dataframe.dataset_airfoils.at[selected_row, 'Cl max']
         l_d_max = self.airfoil_dataframe.dataset_airfoils.at[selected_row, 'Cl/Cd max']
-        # wing aerodynamics
-        self.handler.aero_obj = Aerodynamics(float(self.txt_weight.get()),
-                                             float(self.txt_surface.get()),
-                                             float(self.txt_wingspan.get()),
-                                             float(self.txt_sweep_angle.get()),
-                                             float(self.txt_thrust.get()),
+
+        # we can take only one range between the provided datas. If user enter more than 1 range,
+        # we will take only the first one, the rest will be ignored and we will take only the first value
+        allow_range = True
+
+        weight = self.treat_text_range_to_points(self.txt_weight.get(), allow_range=allow_range)
+        allow_range = allow_range and isinstance(weight, float)
+
+        surface = self.treat_text_range_to_points(self.txt_surface.get(), allow_range=allow_range)
+        allow_range = allow_range and isinstance(surface, float)
+
+        wingspan = self.treat_text_range_to_points(self.txt_wingspan.get(), allow_range=allow_range)
+        allow_range = allow_range and isinstance(wingspan, float)
+
+        thrust = self.treat_text_range_to_points(self.txt_thrust.get(), allow_range=allow_range)
+        allow_range = allow_range and isinstance(thrust, float)
+
+        self.handler.aero_obj = Aerodynamics(weight,
+                                             surface,
+                                             wingspan,
+                                             thrust,
                                              cl_max=float(cl_max),
                                              l_d_max=float(l_d_max))
 
         # Air
         # convert altitude from foot to meter
-        altitude = float(self.txt_altitude.get()) * 0.3048
+        altitude = self.treat_text_range_to_points(self.txt_altitude.get(), allow_range=allow_range) * 0.3048
         self.handler.atm_obj = Atmosphere(altitude)
 
     def compute_stall_speed(self):
@@ -99,14 +134,6 @@ class App(tk.Tk):
     def compute_landing_distance(self):
         self.populate_from_frame_to_objects()
         self.handler.compute_landing_distance()
-
-    # def open_window(self):
-    #     window = Window(self)
-    #     window.grab_set()
-
-    # def test(self):
-    #     afdf = AirfoilDataFrame(self)
-    #     afdf.grab_set()
 
 
 if __name__ == "__main__":
