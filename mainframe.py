@@ -19,12 +19,15 @@ class App(tk.Tk):
         self.geometry('1500x770+2+1')
         self.title('MGA802 Final project')
 
-        self.lbl_weight = ttk.Label(self, text="Weight (Kg)")
-        self.lbl_surface = ttk.Label(self, text="Surface (m^2)")
-        self.lbl_wingspan = ttk.Label(self, text="Wingspan (m)")
+        self.lbl_info = ttk.Label(self, text="Re=6M, Mach=0")
+        self.lbl_info.place(relx=0.8, rely=0.78, anchor='ne')
+
+        self.lbl_weight = ttk.Label(self, text="Weight (lb)")
+        self.lbl_surface = ttk.Label(self, text="Surface (ft^2)")
+        self.lbl_wingspan = ttk.Label(self, text="Wingspan (ft)")
         self.lbl_sweep_angle = ttk.Label(self, text="Sweep angle (deg)")
         self.lbl_thrust = ttk.Label(self, text="Thrust (todo)")
-        self.lbl_altitude = ttk.Label(self, text="Altitude (m)")
+        self.lbl_altitude = ttk.Label(self, text="Altitude (ft)")
 
         self.lbl_weight.place(relx=0.01, rely=0.83, anchor='sw')
         self.lbl_surface.place(relx=0.01, rely=0.86, anchor='sw')
@@ -48,10 +51,13 @@ class App(tk.Tk):
         self.txt_altitude.place(relx=0.1, rely=0.98, anchor='sw')
 
         self.btn_stall_speed = tk.Button(self, text="Stall speed", command=self.compute_stall_speed)
+        self.btn_takeoff_speed = tk.Button(self, text="Takeoff speed", command=self.compute_takeoff_speed)
         self.btn_optimal_speed = tk.Button(self, text="Optimal speed", command=self.compute_optimal_speed)
 
         self.btn_stall_speed.place(relx=0.25, rely=0.835, anchor='sw')
-        self.btn_optimal_speed.place(relx=0.25, rely=0.875, anchor='sw')
+        self.btn_takeoff_speed.place(relx=0.25, rely=0.875, anchor='sw')
+        self.btn_optimal_speed.place(relx=0.25, rely=0.915, anchor='sw')
+
 
     def populate_from_frame_to_objects(self):
         selected_row = self.airfoil_dataframe.table.getSelectedRow()
@@ -67,11 +73,17 @@ class App(tk.Tk):
                                              l_d_max=float(l_d_max))
 
         # Air
-        self.handler.atm_obj = Atmosphere(float(self.txt_altitude.get()))
+        # convert altitude from foot to meter
+        altitude = float(self.txt_altitude.get()) * 0.3048
+        self.handler.atm_obj = Atmosphere(altitude)
 
     def compute_stall_speed(self):
         self.populate_from_frame_to_objects()
         self.handler.compute_stall_speed()
+
+    def compute_takeoff_speed(self):
+        self.populate_from_frame_to_objects()
+        self.handler.compute_takeoff_speed()
 
     def compute_optimal_speed(self):
         self.populate_from_frame_to_objects()

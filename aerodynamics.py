@@ -9,6 +9,10 @@ class Aerodynamics:
         self._cl_max = cl_max
         self._l_d_max = l_d_max
 
+    def coeff_aspect_ratio(self):
+        A = (self._wingspan ** 2) / self._surface
+        return A
+
     @property
     def weight(self):
         return self._weight

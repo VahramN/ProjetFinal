@@ -3,7 +3,7 @@ import math
 
 class Atmosphere:
     def __init__(self, altitude=0.):
-        self.altitude = altitude # meters
+        self.altitude = altitude  # meters
 
     def compute_pressure(self):
         p0 = 101325  # Pa - Pression standard au niveau de la mer
@@ -18,6 +18,10 @@ class Atmosphere:
 
         density = self.compute_pressure() * M / (R * self.compute_temperature())  # kg/m^3 - Densité de l'air en fonction de la pression et de la température, equation gaz parfait
         return density
+
+    # convert from kg/m^3 to slug/cu.ft
+    def compute_density_imperial(self):
+        return self.compute_density() / 515.378818492
 
     def compute_temperature(self):
         # Supposons que la température de l'air diminue avec l'altitude selon la formule suivante :
