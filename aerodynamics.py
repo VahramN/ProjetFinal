@@ -1,10 +1,9 @@
 class Aerodynamics:
 
-    def __init__(self, weight, surface, wingspan, sweep_angle, thrust, cl_max, l_d_max):
+    def __init__(self, weight, surface, wingspan, thrust, cl_max, l_d_max):
         self._weight = weight
         self._surface = surface
         self._wingspan = wingspan
-        self._sweep_angle = sweep_angle
         self._thrust = thrust
         self._cl_max = cl_max
         self._l_d_max = l_d_max
@@ -36,14 +35,6 @@ class Aerodynamics:
     @surface.setter
     def wingspan(self, value):
         self._wingspan = value
-
-    @property
-    def sweep_angle(self):
-        return self._sweep_angle
-
-    @surface.setter
-    def sweep_angle(self, value):
-        self._sweep_angle = value
 
     @property
     def thrust(self):
