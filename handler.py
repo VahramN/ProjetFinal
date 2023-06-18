@@ -1,10 +1,11 @@
 import math
-
+from atmosphere import Atmosphere
 
 class Handler:
     def __init__(self):
         self.aero_obj = None
         self.atm_obj = None
+        self.atm_0_obj = Atmosphere(0)
         self.airfoil_obj = None
 
     def convert_speed_imperial_to_knots(self, speed):
@@ -32,11 +33,24 @@ class Handler:
         print(f"optimal speed is: {v_optimal} (kts)")
         return v_optimal
 
-    def take_of_distance(self):
-        TO_distance = 20.9 * (self.aero_obj.weight / self.aero_obj.surface) * \
-                      (self.aero_obj.weight / self.aero_obj.thrust) * (1 / self.aero_obj.cl_max) + \
-                      87 * math.sqrt(self.aero_obj.weight / (1 / self.aero_obj.cl_max))
-        return TO_distance
+    def compute_takeoff_distance(self):
+        density_ratio = self.atm_obj.compute_density_imperial() / self.atm_0_obj.compute_density_imperial()
+        TOP = (self.aero_obj.weight / self.aero_obj.surface) * \
+              (1 / self.aero_obj.cl_max) * \
+              (self.aero_obj.weight / self.aero_obj.thrust) * (1 / density_ratio)
+
+        takeoff_distance = 20.9 * TOP + 87 * math.sqrt(TOP * (self.aero_obj.thrust / self.aero_obj.weight))
+        # temporary printing
+        print(f"takeoff distance is: {takeoff_distance} (ft)")
+        return takeoff_distance
+
+    def compute_landing_distance(self):
+        density_ratio = self.atm_obj.compute_density_imperial() / self.atm_0_obj.compute_density_imperial()
+        LP = (self.aero_obj.weight / self.aero_obj.surface) * (1 / (density_ratio * self.aero_obj.cl_max))
+        landing_distance = 118 * LP + 400
+        # temporary printing
+        print(f"landing distance is: {landing_distance} (ft)")
+        return landing_distance
 
     def coeff_K(self):
         e = 0.8
