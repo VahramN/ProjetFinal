@@ -70,15 +70,14 @@ class App(tk.Tk):
             start_limit = float(arr[0])
             end_limit = float(arr[len(arr) - 1])
             num = int(abs(end_limit - start_limit) * 10)
-            # lets limit to [200-2000] points max
-            np.clip(num, 200, 2000)
+            # let's limit to [1000-3000] points max
+            np.clip(num, 1000, 3000)
             arr_range = np.linspace(start_limit, end_limit, num)
         elif len(arr) > 1:
             # we will take only the first value and will ignore the rest
             arr_range = float(arr[0])
         else:
             arr_range = float(text)
-        print(arr_range)
         return arr_range
 
     def populate_from_frame_to_objects(self):

@@ -32,7 +32,7 @@ class Aerodynamics:
     def wingspan(self):
         return self._wingspan
 
-    @surface.setter
+    @wingspan.setter
     def wingspan(self, value):
         self._wingspan = value
 
@@ -40,7 +40,7 @@ class Aerodynamics:
     def thrust(self):
         return self._thrust
 
-    @surface.setter
+    @thrust.setter
     def thrust(self, value):
         self._thrust = value
 
