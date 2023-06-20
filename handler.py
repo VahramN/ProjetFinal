@@ -22,7 +22,7 @@ class Handler:
         elif isinstance(self.aero_obj.wingspan, np.ndarray):
             return self.aero_obj.wingspan, "Wingspan (ft)"
         elif isinstance(self.aero_obj.thrust, np.ndarray):
-            return self.aero_obj.thrust, "Thrust ()"
+            return self.aero_obj.thrust, "Thrust (lb)"
         elif isinstance(self.atm_obj.altitude, np.ndarray):
             return (self.atm_obj.altitude / 0.3048), "Altitude (ft)"  # convert to foot for display
         else:

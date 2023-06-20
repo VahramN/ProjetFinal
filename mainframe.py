@@ -26,7 +26,7 @@ class App(tk.Tk):
         self.lbl_weight = ttk.Label(self, text="Weight (lb)")
         self.lbl_surface = ttk.Label(self, text="Surface (ft^2)")
         self.lbl_wingspan = ttk.Label(self, text="Wingspan (ft)")
-        self.lbl_thrust = ttk.Label(self, text="Jet Thrust (todo)")
+        self.lbl_thrust = ttk.Label(self, text="Jet Thrust (lb)")
         self.lbl_altitude = ttk.Label(self, text="Altitude (ft)")
 
         self.lbl_weight.place(relx=0.01, rely=0.83, anchor='sw')
