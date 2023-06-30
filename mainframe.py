@@ -61,10 +61,15 @@ class App(tk.Tk):
         self.btn_takeoff_distance.place(relx=0.4, rely=0.835, anchor='sw')
         self.btn_landing_distance.place(relx=0.4, rely=0.875, anchor='sw')
 
-    # text format can be the single float value or the range, ex: 1000-1200
-    # allow_range bool value and in case of false, even the text is given in range format
-    # the function will consider only the first value and will return the single float value
     def treat_text_range_to_points(self, text, allow_range):
+        """
+        Treat the text as float points array or single point
+
+        :param text: single float value **or** the range, ex: 1000-1200
+        :param allow_range: allow range bool value (in case of false, even the text is given in range format will consider only the first value)
+
+        :return: single float **or** the float range array.
+        """
         arr = text.split("-")
         if (len(arr) > 1) and allow_range:
             start_limit = float(arr[0])
@@ -81,12 +86,19 @@ class App(tk.Tk):
         return arr_range
 
     def populate_from_frame_to_objects(self):
+        """
+        Populate the user data from the frame to the objects.
+
+        - airfoil_dataframe,
+        - handler's aero_obj,
+        - handler's atm_obj.
+        """
         selected_row = self.airfoil_dataframe.table.getSelectedRow()
         # wing aerodynamics
         cl_max = self.airfoil_dataframe.dataset_airfoils.at[selected_row, 'Cl max']
         l_d_max = self.airfoil_dataframe.dataset_airfoils.at[selected_row, 'Cl/Cd max']
 
-        # we can take only one range between the provided datas. If user enter more than 1 range,
+        # we can take only one range between the provided datas. If the user enters more than 1 range,
         # we will take only the first one, the rest will be ignored and we will take only the first value
         allow_range = True
 
@@ -115,22 +127,47 @@ class App(tk.Tk):
         self.handler.atm_obj = Atmosphere(altitude)
 
     def compute_stall_speed(self):
+        """
+        Compute the stall speed.
+        Read the user entered values in the form.
+        Call Handler's function to Compute the stall speed.
+        """
         self.populate_from_frame_to_objects()
         self.handler.compute_stall_speed()
 
     def compute_takeoff_speed(self):
+        """
+        Compute the takeoff speed.
+        Read the user entered values in the form.
+        Call Handler's function to Compute the takeoff speed.
+        """
         self.populate_from_frame_to_objects()
         self.handler.compute_takeoff_speed()
 
     def compute_optimal_speed(self):
+        """
+        Compute the optimal speed.
+        Read the user entered values in the form.
+        Call Handler's function to Compute the optimal speed.
+        """
         self.populate_from_frame_to_objects()
         self.handler.compute_optimal_speed()
 
     def compute_takeoff_distance(self):
+        """
+        Compute the takeoff distance.
+        Read the user entered values in the form.
+        Call Handler's function to Compute the takeoff distance.
+        """
         self.populate_from_frame_to_objects()
         self.handler.compute_takeoff_distance()
 
     def compute_landing_distance(self):
+        """
+        Compute the landing distance.
+        Read the user entered values in the form.
+        Call Handler's function to Compute the landing distance.
+        """
         self.populate_from_frame_to_objects()
         self.handler.compute_landing_distance()
 

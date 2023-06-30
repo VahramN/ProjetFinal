@@ -6,6 +6,9 @@ AIRFOILS_FILE = "airfoils.csv"
 
 
 class AirfoilDataFrame(tk.Frame):
+    """
+    AirfoilDataFrame class read data from the csv file and creates pandastable.
+    """
     def __init__(self, parent=None):
         self.parent = parent
         tk.Frame.__init__(self)

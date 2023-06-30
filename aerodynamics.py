@@ -8,7 +8,30 @@ class Aerodynamics:
         self._cl_max = cl_max
         self._l_d_max = l_d_max
 
+    def coeff_K(self):
+        """
+        Calculate coefficient k
+        :return: coefficient k
+        """
+        e = 0.8
+        PI = 3.14
+        k = 1 / (PI * e * self.coeff_aspect_ratio())
+        return k
+
+    def coeff_drag0(self):
+        """
+        Calculate drag coefficient D0
+        :return: drag coefficient D0
+        """
+        cd0 = 1 / (4 * self.coeff_K() * self.l_d_max)
+        return cd0
+
     def coeff_aspect_ratio(self):
+        """
+        Compute the coefficient aspect ratio
+
+        :return: coefficient aspect ratio.
+        """
         A = (self._wingspan ** 2) / self._surface
         return A
 
