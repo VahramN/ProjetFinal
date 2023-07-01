@@ -17,7 +17,10 @@ class AirfoilDataFrame(tk.Frame):
         f = tk.Frame(self.main)
         f.pack(fill=tk.BOTH, expand=1)
 
+        # read csv file and set in dataframe
         self.dataset_airfoils = pd.read_csv(AIRFOILS_FILE, sep=',', header=0)
+        # set in pandas table
         self.table = pt = Table(f, dataframe=self.dataset_airfoils, showtoolbar=True, showstatusbar=True)
+        # make it visible
         pt.show()
         return

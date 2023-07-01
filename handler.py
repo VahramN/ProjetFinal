@@ -4,6 +4,10 @@ import plot
 
 
 class Handler:
+    """
+    Class handler is the manager of the current program.
+    It is handling the calculations and the displaying of the results.
+    """
     def __init__(self):
         self.aero_obj = None
         self.atm_obj = None

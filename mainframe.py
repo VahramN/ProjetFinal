@@ -8,6 +8,9 @@ from atmosphere import Atmosphere
 
 
 class App(tk.Tk):
+    """
+    GUI and starting class.
+    """
     def __init__(self):
         super().__init__()
 

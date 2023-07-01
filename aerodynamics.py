@@ -1,5 +1,7 @@
 class Aerodynamics:
-
+    """
+    Class Aerodynamics contains the information about wing aerodynamics.
+    """
     def __init__(self, weight, surface, wingspan, thrust, cl_max, l_d_max):
         self._weight = weight
         self._surface = surface
